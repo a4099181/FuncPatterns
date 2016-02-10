@@ -16,8 +16,6 @@ namespace FuncPatterns.Tests
     [Subject("Shape reader")]
     sealed class WhenShapeReaderReadsCircleElement
     {
-        static XmlReader _xmlReader;
-        static string _radius;
         Establish _context = () => _xmlReader = new XmlTextReader(new StringReader("<Circle radius='75' />"));
 
         Because _of = () =>
@@ -29,5 +27,8 @@ namespace FuncPatterns.Tests
         };
 
         It _shouldReadRadiusOf75 = () => _radius.ShouldEqual("75");
+
+        static XmlReader _xmlReader;
+        static string _radius;
     }
 }

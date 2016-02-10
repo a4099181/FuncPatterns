@@ -1,5 +1,5 @@
 // =================================================
-// <copyright file="WhenMonadicLinkIsMonade.cs">
+// <copyright file="WhenMonadLinkIsMonadicType.cs">
 //     Copyright (c) 2016 seb!
 // </copyright>
 // <author>seb!</author>
@@ -12,23 +12,20 @@ using Machine.Specifications;
 namespace FuncPatterns.Tests
 {
     [Subject("Three monade laws")]
-    sealed class WhenMonadBasedOnMonadicLinkIs
+    sealed class WhenMonadLinkIsMonadicType
     {
-        static FoundLinkFake _a;
-        static MissedLinkFake _b;
-
         Establish _context = () =>
         {
-            _a = new FoundLinkFake();
-            _b = new MissedLinkFake();
+            _foundLink = new FoundLinkFake();
+            _missedLink = new MissedLinkFake();
         };
 
         //return a >>= f = f a
         It _shouldSatisfyFirstLawOfMonads = () =>
         {
             Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> f = MonadicLink.Create;
-            var left = MonadicLink.Create(_a).BindTo(f);
-            var right = f(_a);
+            var left = MonadicLink.Create(_foundLink).BindTo(f);
+            var right = f(_foundLink);
 
             left().ShouldEqual(right());
         };
@@ -36,7 +33,7 @@ namespace FuncPatterns.Tests
         //m >>= return = m
         It _shouldSatisfySecondLawOfMonads = () =>
         {
-            var m = MonadicLink.Create(_a);
+            var m = MonadicLink.Create(_foundLink);
             var left = m.BindTo(MonadicLink.Create);
 
             left.ShouldEqual(m);
@@ -45,15 +42,18 @@ namespace FuncPatterns.Tests
         //m >>= (\x -> f x >>= g) = (m >>= f) >>= g
         It _shouldSatisfyThirdLawOfMonads = () =>
         {
-            var m = MonadicLink.Create(_b);
-            Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> f = x => MonadicLink.Create(_b);
-            Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> g = x => MonadicLink.Create(_a);
+            var m = MonadicLink.Create(_missedLink);
+            Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> f = x => MonadicLink.Create(_missedLink);
+            Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> g = x => MonadicLink.Create(_foundLink);
 
             var left = m.BindTo(x => f(x).BindTo(g));
             var right = m.BindTo(f).BindTo(g);
 
             left().ShouldEqual(right());
         };
+
+        static FoundLinkFake _foundLink;
+        static MissedLinkFake _missedLink;
 
         sealed class FoundLinkFake : MonadicLink<string, int>
         {

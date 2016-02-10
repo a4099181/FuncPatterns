@@ -16,8 +16,6 @@ namespace FuncPatterns.Tests
     [Subject("Shape reader")]
     sealed class WhenShapeReaderReadsSquareElement
     {
-        static XmlReader _xmlReader;
-        static string _length;
         Establish _context = () => _xmlReader = new XmlTextReader(new StringReader("<Square length='25' />"));
 
         Because _of = () =>
@@ -29,5 +27,8 @@ namespace FuncPatterns.Tests
         };
 
         It _shouldReadLengthOf25 = () => _length.ShouldEqual("25");
+
+        static XmlReader _xmlReader;
+        static string _length;
     }
 }
