@@ -1,11 +1,18 @@
+// =================================================
+// <copyright file="SquareReader.cs">
+//     Copyright (c) 2016 seb!
+// </copyright>
+// <author>seb!</author>
+// =================================================
+
+using System.Xml;
+using FuncPatterns.Functional.ChainOfResponsibility;
+
 namespace FuncPatterns.Tests.ShapeReader
 {
-    using System.Xml;
-    using Functional.ChainOfResponsibility;
-
     sealed class SquareReader : MonadicLink<XmlReader, string>
     {
-        public override string Process()
+        protected override string ProcessCore()
             => Input.Name == "Square" ? Input.GetAttribute("length") : null;
     }
 }

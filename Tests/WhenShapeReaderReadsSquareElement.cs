@@ -1,29 +1,33 @@
+// =================================================
+// <copyright file="WhenShapeReaderReadsSquareElement.cs">
+//     Copyright (c) 2016 seb!
+// </copyright>
+// <author>seb!</author>
+// =================================================
+
+using System.IO;
+using System.Xml;
+using FuncPatterns.Functional.ChainOfResponsibility;
+using FuncPatterns.Tests.ShapeReader;
+using Machine.Specifications;
+
 namespace FuncPatterns.Tests
 {
-    using System.IO;
-    using System.Xml;
-    using Machine.Specifications;
-    using ShapeReader;
-    using Functional.ChainOfResponsibility;
-    using static Functional.ChainOfResponsibility.MonadicLink<System.Xml.XmlReader, string>;
-
     [Subject("Shape reader")]
     sealed class WhenShapeReaderReadsSquareElement
     {
-        Establish _context = () => xmlReader = new XmlTextReader(new StringReader("<Square length='25' />"));
+        static XmlReader _xmlReader;
+        static string _length;
+        Establish _context = () => _xmlReader = new XmlTextReader(new StringReader("<Square length='25' />"));
 
         Because _of = () =>
         {
-            xmlReader.Read();
-            var chain = Create<SquareReader>(xmlReader)
-                .BindTo(Create<CircleReader>);
-            length = chain().Process();
+            _xmlReader.Read();
+            var chain = MonadicLink.Create(new SquareReader {Input = _xmlReader})
+                .BindTo(l => MonadicLink.Create(new CircleReader {Input = l.Input}));
+            _length = chain().Process();
         };
 
-        It _shouldReadLengthOf25 = () => length.ShouldEqual("25");
-
-        static XmlReader xmlReader;
-        static string length;
+        It _shouldReadLengthOf25 = () => _length.ShouldEqual("25");
     }
 }
-

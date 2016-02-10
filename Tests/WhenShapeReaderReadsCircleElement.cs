@@ -1,29 +1,33 @@
+// =================================================
+// <copyright file="WhenShapeReaderReadsCircleElement.cs">
+//     Copyright (c) 2016 seb!
+// </copyright>
+// <author>seb!</author>
+// =================================================
+
+using System.IO;
+using System.Xml;
+using FuncPatterns.Functional.ChainOfResponsibility;
+using FuncPatterns.Tests.ShapeReader;
+using Machine.Specifications;
+
 namespace FuncPatterns.Tests
 {
-    using System.IO;
-    using System.Xml;
-    using Machine.Specifications;
-    using ShapeReader;
-    using Functional.ChainOfResponsibility;
-    using static Functional.ChainOfResponsibility.MonadicLink<System.Xml.XmlReader, string>;
-
     [Subject("Shape reader")]
     sealed class WhenShapeReaderReadsCircleElement
     {
-        Establish _context = () => xmlReader = new XmlTextReader(new StringReader("<Circle radius='75' />"));
+        static XmlReader _xmlReader;
+        static string _radius;
+        Establish _context = () => _xmlReader = new XmlTextReader(new StringReader("<Circle radius='75' />"));
 
         Because _of = () =>
         {
-            xmlReader.Read();
-            var chain = Create<SquareReader>(xmlReader)
-                .BindTo(Create<CircleReader>);
-            radius = chain().Process();
+            _xmlReader.Read();
+            var chain = MonadicLink.Create(new SquareReader {Input = _xmlReader})
+                .BindTo(l => MonadicLink.Create(new CircleReader {Input = l.Input}));
+            _radius = chain().Process();
         };
 
-        It _shouldReadRadiusOf75 = () => radius.ShouldEqual("75");
-
-        static XmlReader xmlReader;
-        static string radius;
+        It _shouldReadRadiusOf75 = () => _radius.ShouldEqual("75");
     }
 }
-
