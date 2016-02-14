@@ -1,7 +1,9 @@
 # Func < Patterns >
 ######_sample chain of responsibility_ **ShapeReader**
 
-All classes compose complex ShapeReader functionality.
+MonadicReader realize factory method design pattern and builds a chain that read sample xml data.
+
+All other classes compose complex ShapeReader functionality.
 Every single class is responsible for recognizing exact XML element and should read it when it is possible.
 
 That is the way to achieve:

@@ -51,10 +51,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Functional\ChainOfResponsibility\MonadicLink.cs" />
+    <Compile Include="ChainOfResponsibility\MonadicLink.cs" />
     <Compile Include="Tests\ShapeReader\CircleReader.cs" />
+    <Compile Include="Tests\ShapeReader\MonadicReader.cs" />
     <Compile Include="Tests\ShapeReader\SquareReader.cs" />
-    <Content Include="Tests\WhenMonadLinkIsMonadicType.cs" />
+    <Compile Include="Tests\WhenMonadLinkIsMonadicType.cs" />
     <Compile Include="Tests\WhenShapeReaderReadsCircleElement.cs" />
     <Compile Include="Tests\WhenShapeReaderReadsSquareElement.cs" />
   </ItemGroup>
@@ -63,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="Tests\ShapeReader\README.md" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

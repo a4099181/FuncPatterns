@@ -6,63 +6,59 @@
 // =================================================
 
 using System;
-using FuncPatterns.Functional.ChainOfResponsibility;
+using FuncPatterns.ChainOfResponsibility;
 using Machine.Specifications;
+using static FuncPatterns.ChainOfResponsibility.MonadicLink<string, int>;
 
 namespace FuncPatterns.Tests
 {
-    [Subject("Three monade laws")]
+    [Subject("Three laws of monads")]
     sealed class WhenMonadLinkIsMonadicType
     {
-        Establish _context = () =>
-        {
-            _foundLink = new FoundLinkFake();
-            _missedLink = new MissedLinkFake();
-        };
-
         //return a >>= f = f a
         It _shouldSatisfyFirstLawOfMonads = () =>
         {
-            Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> f = MonadicLink.Create;
-            var left = MonadicLink.Create(_foundLink).BindTo(f);
-            var right = f(_foundLink);
+            Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> f = Unit<FoundLinkFake>;
+            var left = Unit<FoundLinkFake>().Bind(f);
+            var right = f(new FoundLinkFake());
 
-            left().ShouldEqual(right());
+            left().Process("me").ShouldEqual(right().Process("me"));
         };
 
         //m >>= return = m
         It _shouldSatisfySecondLawOfMonads = () =>
         {
-            var m = MonadicLink.Create(_foundLink);
-            var left = m.BindTo(MonadicLink.Create);
+            var m = Unit<FoundLinkFake>();
+            var left = m.Bind(Unit<FoundLinkFake>);
 
-            left.ShouldEqual(m);
+            left().Process("me").ShouldEqual(m().Process("me"));
         };
 
         //m >>= (\x -> f x >>= g) = (m >>= f) >>= g
         It _shouldSatisfyThirdLawOfMonads = () =>
         {
-            var m = MonadicLink.Create(_missedLink);
-            Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> f = x => MonadicLink.Create(_missedLink);
-            Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> g = x => MonadicLink.Create(_foundLink);
+            var m = Unit<MissedLinkFake>();
+            Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> f = Unit<MissedLinkFake>;
+            Func<MonadicLink<string, int>, Func<MonadicLink<string, int>>> g = Unit<FoundLinkFake>;
 
-            var left = m.BindTo(x => f(x).BindTo(g));
-            var right = m.BindTo(f).BindTo(g);
+            var left = m.Bind(x => f(x).Bind(g));
+            var right = m.Bind(f).Bind(g);
 
-            left().ShouldEqual(right());
+            left().Process("me").ShouldEqual(right().Process("me"));
         };
-
-        static FoundLinkFake _foundLink;
-        static MissedLinkFake _missedLink;
 
         sealed class FoundLinkFake : MonadicLink<string, int>
         {
-            protected override int ProcessCore() => 1;
+            protected internal override bool IsApplicableFor(string input) => true;
+
+            protected internal override int Resolve(string input) => input.Length;
         }
 
         sealed class MissedLinkFake : MonadicLink<string, int>
         {
-            protected override int ProcessCore() => default(int);
+            protected internal override bool IsApplicableFor(string input) => false;
+
+            protected internal override int Resolve(string input) => 0;
         }
     }
 }

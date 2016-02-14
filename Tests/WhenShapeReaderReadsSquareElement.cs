@@ -1,13 +1,13 @@
 // =================================================
-// <copyright file="WhenShapeReaderReadsSquareElement.cs">
-//     Copyright (c) 2016 seb!
+// <copyright file="WhenShapeReaderReadsSquareElement.cs" company="seb!">
+//     Copyright (c) 2016
 // </copyright>
-// <author>seb!</author>
+// <author>s.mach</author>
 // =================================================
 
 using System.IO;
 using System.Xml;
-using FuncPatterns.Functional.ChainOfResponsibility;
+using FuncPatterns.ChainOfResponsibility;
 using FuncPatterns.Tests.ShapeReader;
 using Machine.Specifications;
 
@@ -16,19 +16,22 @@ namespace FuncPatterns.Tests
     [Subject("Shape reader")]
     sealed class WhenShapeReaderReadsSquareElement
     {
-        Establish _context = () => _xmlReader = new XmlTextReader(new StringReader("<Square length='25' />"));
+        Establish _context = () =>
+        {
+            _xmlReader = new XmlTextReader(new StringReader("<Square length='25' />"));
+            _chain = MonadicReader.Create();
+        };
 
         Because _of = () =>
         {
             _xmlReader.Read();
-            var chain = MonadicLink.Create(new SquareReader {Input = _xmlReader})
-                .BindTo(l => MonadicLink.Create(new CircleReader {Input = l.Input}));
-            _length = chain().Process();
+            _length = _chain.Process(_xmlReader);
         };
 
         It _shouldReadLengthOf25 = () => _length.ShouldEqual("25");
+        static MonadicLink<XmlReader, string> _chain;
+        static string _length;
 
         static XmlReader _xmlReader;
-        static string _length;
     }
 }
