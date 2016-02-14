@@ -1,8 +1,8 @@
 // =================================================
-// <copyright file="WhenMonadLinkIsMonadicType.cs">
-//     Copyright (c) 2016 seb!
+// <copyright file="WhenMonadLinkIsMonadicType.cs" company="seb!">
+//     Copyright (c) 2016
 // </copyright>
-// <author>seb!</author>
+// <author>s.mach</author>
 // =================================================
 
 using System;
