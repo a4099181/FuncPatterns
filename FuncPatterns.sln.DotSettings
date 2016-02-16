@@ -1,0 +1,13 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/CodeStyle/FileHeader/FileHeaderText/@EntryValue">=================================================&#xD;
+&lt;copyright file="$FILENAME$" company="seb!"&gt;&#xD;
+    Copyright (c) $CURRENT_YEAR$&#xD;
+&lt;/copyright&gt;&#xD;
+&lt;author&gt;$USER_LOGIN$&lt;/author&gt;&#xD;
+=================================================&#xD;
+</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=E972646CA61E274CBF9B866338850ACF/@KeyIndexDefined">True</s:Boolean>
+	<s:String x:Key="/Default/Environment/InjectedLayers/FileInjectedLayer/=E972646CA61E274CBF9B866338850ACF/RelativePath/@EntryValue">..\CodeStyles\ReSharper\Resharper.DotSettings</s:String>
+	<s:Boolean x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileE972646CA61E274CBF9B866338850ACF/@KeyIndexDefined">True</s:Boolean>
+	<s:Double x:Key="/Default/Environment/InjectedLayers/InjectedLayerCustomization/=FileE972646CA61E274CBF9B866338850ACF/RelativePriority/@EntryValue">1</s:Double>
+	</wpf:ResourceDictionary>

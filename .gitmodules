@@ -1,3 +1,6 @@
 [submodule "Makefile.Includes"]
 	path = Makefile.Includes
 	url = git@github.com:a4099181/Makefile.Includes.git
+[submodule "CodeStyles"]
+	path = CodeStyles
+	url = git@github.com:a4099181/CodeStyles.git
